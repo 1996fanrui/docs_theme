@@ -9,23 +9,25 @@ Uses an N+1 repository model:
 - **N project repositories**: each maintains its own code, docs, and `docs/theme.json`
 - **1 docs-theme repository** (this repo): owns only the rendering theme and build scripts
 
-### Convention: `docs/theme.json` in each project
+### Convention: project config files
 
-Every project using this shared theme **must** provide a `docs/theme.json` at the root of its repository. This is the single source of truth for that project's VitePress configuration.
-
-**Fixed path and name**: `docs/theme.json` — no other location or filename is accepted.
+Each project repository provides config files that this repo's build and deploy scripts consume.
 
 ```
 project-repo/
 ├── docs/
-│   ├── theme.json               # ← required: VitePress config (colors, title, sidebar)
+│   ├── theme.json               # ← required for docs: VitePress config
 │   ├── architecture_overview.md
-│   ├── configuration_reference.md
 │   └── ...
+├── website/                     # ← optional: standalone website (landing page, etc.)
+│   ├── site.json                # ← required if website/ exists: deploy config
+│   └── index.html
 └── ...
 ```
 
-`theme.json` schema:
+#### `docs/theme.json` — docs site config
+
+**Fixed path and name**: `docs/theme.json` — no other location or filename is accepted.
 
 ```json
 {
@@ -36,16 +38,23 @@ project-repo/
   "accent": "#3B82F6",
   "github": "https://github.com/org/repo",
   "cfPagesProject": "my-project-docs",
-  "sidebar": [
-    {
-      "text": "Getting Started",
-      "items": [
-        { "text": "Architecture Overview", "link": "/architecture_overview" }
-      ]
-    }
-  ]
+  "sidebar": [...]
 }
 ```
+
+#### `website/site.json` — website deploy config
+
+**Fixed path and name**: `website/site.json` — no other location or filename is accepted.
+
+```json
+{
+  "name": "My Project",
+  "cfPagesProject": "my-project",
+  "url": "https://my-project.com"
+}
+```
+
+The website is deployed as-is (pure static files), no build step required.
 
 ### This repository's structure
 
@@ -84,12 +93,10 @@ docs-theme/
 
 ### Deploy to Cloudflare Pages
 
-Each project's docs site is an independent Cloudflare Pages project. The build process:
-1. The build script reads `docs/theme.json` and `docs/*.md` from the project repo
-2. VitePress renders them into static HTML using this repository's theme
-3. The output is deployed to Cloudflare Pages
+Each project has independent Cloudflare Pages projects. The GitHub Actions workflow (`deploy.yml`) supports two deploy types:
 
-The GitHub Actions workflow (`deploy.yml`) handles this automatically: it checks out the target project, then calls `./scripts/build.sh <project> .target-repo`.
+- **docs**: builds VitePress from `docs/theme.json` + `docs/*.md`, deploys the rendered output
+- **website**: deploys the `website/` directory as-is (pure static files, no build)
 
 ## Theme design
 

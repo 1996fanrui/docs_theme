@@ -10,6 +10,14 @@ on:
         type: choice
         options:
           - agents-sandbox
+      deploy_type:
+        description: 'Deploy type'
+        required: true
+        default: 'docs'
+        type: choice
+        options:
+          - docs
+          - website
       target_repo_branch:
         description: 'Target project branch'
         required: true
@@ -30,18 +38,37 @@ jobs:
           ref: ${{ inputs.target_repo_branch }}
           path: .target-repo
 
+      - name: Read deploy config
+        id: config
+        run: |
+          if [ "${{ inputs.deploy_type }}" = "docs" ]; then
+            CONFIG_FILE=".target-repo/docs/theme.json"
+          else
+            CONFIG_FILE=".target-repo/website/site.json"
+          fi
+          if [ ! -f "$CONFIG_FILE" ]; then
+            echo "Error: $CONFIG_FILE not found"
+            exit 1
+          fi
+          CF_PROJECT=$(node -e "console.log(JSON.parse(require('fs').readFileSync('$CONFIG_FILE','utf8')).cfPagesProject)")
+          echo "cf_project=$CF_PROJECT" >> "$GITHUB_OUTPUT"
+
       - name: Setup Node.js
+        if: inputs.deploy_type == 'docs'
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
       - name: Install pnpm
+        if: inputs.deploy_type == 'docs'
         uses: pnpm/action-setup@v4
 
       - name: Install dependencies
+        if: inputs.deploy_type == 'docs'
         run: pnpm install
 
-      - name: Build
+      - name: Build docs
+        if: inputs.deploy_type == 'docs'
         run: ./scripts/build.sh ${{ inputs.project }} .target-repo
 
       - name: Deploy to Cloudflare Pages
@@ -49,4 +76,9 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy .docs-src/${{ inputs.project }}/.vitepress/dist --project-name=${{ inputs.project }}-docs
+          command: >-
+            pages deploy
+            ${{ inputs.deploy_type == 'docs'
+                && format('.docs-src/{0}/.vitepress/dist', inputs.project)
+                || '.target-repo/website' }}
+            --project-name=${{ steps.config.outputs.cf_project }}
