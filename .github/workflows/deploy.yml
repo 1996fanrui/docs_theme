@@ -54,13 +54,11 @@ jobs:
           echo "cf_project=$CF_PROJECT" >> "$GITHUB_OUTPUT"
 
       - name: Setup Node.js
-        if: inputs.deploy_type == 'docs'
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
       - name: Install pnpm
-        if: inputs.deploy_type == 'docs'
         uses: pnpm/action-setup@v4
 
       - name: Install dependencies
