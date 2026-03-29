@@ -6,25 +6,45 @@ Shared documentation theme repository that provides a unified VitePress-based do
 
 Uses an N+1 repository model:
 
-- **N project repositories**: each maintains its own code, docs, and landing page
+- **N project repositories**: each maintains its own code, docs, and `docs/theme.json`
 - **1 docs-theme repository** (this repo): owns only the rendering theme and build scripts
 
-### Directory convention for each project repository
+### Convention: `docs/theme.json` in each project
+
+Every project using this shared theme **must** provide a `docs/theme.json` at the root of its repository. This is the single source of truth for that project's VitePress configuration.
+
+**Fixed path and name**: `docs/theme.json` — no other location or filename is accepted.
 
 ```
 project-repo/
-├── docs/                    # Plain Markdown files (flat layout, no theme config mixed in)
+├── docs/
+│   ├── theme.json               # ← required: VitePress config (colors, title, sidebar)
 │   ├── architecture_overview.md
 │   ├── configuration_reference.md
 │   └── ...
-├── website/                 # Website-related assets
-│   ├── landing/
-│   │   └── index.html       # Product landing page (deployed directly to Cloudflare Pages)
-│   ├── theme.json           # Project-specific theme config (colors, title, sidebar structure)
-│   └── public/
-│       └── logo.svg         # Project logo
-├── src/                     # Project source code
 └── ...
+```
+
+`theme.json` schema:
+
+```json
+{
+  "name": "My Project",
+  "docsDir": "docs",
+  "base": "/",
+  "description": "Short description",
+  "accent": "#3B82F6",
+  "github": "https://github.com/org/repo",
+  "cfPagesProject": "my-project-docs",
+  "sidebar": [
+    {
+      "text": "Getting Started",
+      "items": [
+        { "text": "Architecture Overview", "link": "/architecture_overview" }
+      ]
+    }
+  ]
+}
 ```
 
 ### This repository's structure
@@ -32,16 +52,13 @@ project-repo/
 ```
 docs-theme/
 ├── .vitepress/
-│   ├── config.mts           # VitePress config (dynamically reads project config)
+│   ├── config.mts           # VitePress config (reads .docs-src/<project>/theme.json)
 │   └── theme/
-│       ├── index.ts          # Custom theme entry point
-│       └── style.css         # Unified documentation styles
+│       ├── index.ts         # Custom theme entry point
+│       └── style.css        # Unified documentation styles
 ├── scripts/
-│   ├── dev.sh               # Local dev: reads docs from a local repo path
-│   └── build.sh             # Build: clones docs from a remote repo and builds
-├── projects/                # Per-project configuration files
-│   ├── zero-qa.json
-│   └── agents-sandbox.json
+│   ├── dev.sh               # Local dev server
+│   └── build.sh             # Production build
 ├── package.json
 └── README.md
 ```
@@ -51,67 +68,34 @@ docs-theme/
 ### Local development
 
 ```bash
-# Start the VitePress dev server for zero-qa (reads from a local repo)
-./scripts/dev.sh zero-qa /path/to/zero-qa
-
-# Start the VitePress dev server for agents-sandbox
-./scripts/dev.sh agents-sandbox /path/to/agents-sandbox
+# Start the VitePress dev server (reads from a local repo path)
+./scripts/dev.sh <project-name> /path/to/project-repo
 ```
 
 ### Build
 
 ```bash
-# Build the zero-qa documentation site
-./scripts/build.sh zero-qa
+# Build using a local repo path
+./scripts/build.sh <project-name> /path/to/project-repo
 
-# Build the agents-sandbox documentation site
-./scripts/build.sh agents-sandbox
+# Build by cloning from GitHub (github.com/1996fanrui/<project-name>)
+./scripts/build.sh <project-name>
 ```
 
 ### Deploy to Cloudflare Pages
 
 Each project's docs site is an independent Cloudflare Pages project. The build process:
-1. The build script fetches `docs/` from the project's main repository
-2. VitePress renders it into static HTML using this repository's theme
+1. The build script reads `docs/theme.json` and `docs/*.md` from the project repo
+2. VitePress renders them into static HTML using this repository's theme
 3. The output is deployed to Cloudflare Pages
 
-## Sidebar grouping
-
-Files under `docs/` are stored flat. Sidebar grouping is defined in the project's `projects/<name>.json` (or `website/theme.json` in the project repo):
-
-```json
-{
-  "sidebar": [
-    {
-      "text": "Getting Started",
-      "items": [
-        { "text": "Architecture Overview", "link": "/architecture_overview" }
-      ]
-    },
-    {
-      "text": "Design",
-      "items": [
-        { "text": "State Management", "link": "/daemon_state_management" }
-      ]
-    }
-  ]
-}
-```
-
-Files are flat on disk but appear grouped in the UI.
-
-## Cloudflare deployment domains
-
-| Project        | Landing domain        | Docs domain                | Source              |
-|----------------|-----------------------|----------------------------|---------------------|
-| Zero QA        | zero-qa.com           | docs.zero-qa.com           | zero-qa repo docs/  |
-| Agents Sandbox | agents-sandbox.com    | docs.agents-sandbox.com    | agents-sandbox repo docs/ |
+The GitHub Actions workflow (`deploy.yml`) handles this automatically: it checks out the target project, then calls `./scripts/build.sh <project> .target-repo`.
 
 ## Theme design
 
-All projects share the same base layout and interactions. Each project customizes via its config:
+All projects share the same base layout and interactions. Each project customizes via `docs/theme.json`:
 - `accent` color
-- Project name and logo
+- Project name
 - Sidebar structure
 - GitHub repository link
 

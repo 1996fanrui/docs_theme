@@ -3,7 +3,9 @@ import fs from 'fs'
 import path from 'path'
 
 const project = process.env.PROJECT || 'zero-qa'
-const projectConfigPath = path.resolve(__dirname, `../projects/${project}.json`)
+// theme.json is copied from the project repo's docs/theme.json into .docs-src/<project>/theme.json
+// by the build/dev scripts before vitepress starts.
+const projectConfigPath = path.resolve(__dirname, `../.docs-src/${project}/theme.json`)
 const projectConfig = JSON.parse(fs.readFileSync(projectConfigPath, 'utf-8'))
 
 export default defineConfig({
