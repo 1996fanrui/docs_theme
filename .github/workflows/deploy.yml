@@ -69,14 +69,18 @@ jobs:
         if: inputs.deploy_type == 'docs'
         run: ./scripts/build.sh ${{ inputs.project }} .target-repo
 
+      - name: Resolve dist directory
+        id: dist
+        run: |
+          if [ "${{ inputs.deploy_type }}" = "docs" ]; then
+            echo "dir=.docs-src/${{ inputs.project }}/.vitepress/dist" >> "$GITHUB_OUTPUT"
+          else
+            echo "dir=.target-repo/website" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: >-
-            pages deploy
-            ${{ inputs.deploy_type == 'docs'
-                && format('.docs-src/{0}/.vitepress/dist', inputs.project)
-                || '.target-repo/website' }}
-            --project-name=${{ steps.config.outputs.cf_project }}
+          command: pages deploy ${{ steps.dist.outputs.dir }} --project-name=${{ steps.config.outputs.cf_project }}
