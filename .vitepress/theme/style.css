@@ -1,0 +1,271 @@
+/* ── Fonts (loaded via <head> in config.mts) ── */
+
+/* ── Light Mode ── */
+:root {
+  --vp-c-bg: #FDFDF7;
+  --vp-c-bg-alt: #F8F8F2;
+  --vp-c-bg-elv: #FDFDF7;
+  --vp-c-bg-soft: #F5F5EF;
+
+  --vp-c-text-1: #171717;
+  --vp-c-text-2: #666666;
+  --vp-c-text-3: #999999;
+
+  --vp-c-divider: #EAEAEA;
+  --vp-c-gutter: #EAEAEA;
+
+  --vp-c-brand-1: #F97316;
+  --vp-c-brand-2: #FB923C;
+  --vp-c-brand-3: #F97316;
+  --vp-c-brand-soft: rgba(249, 115, 22, 0.1);
+
+  --vp-font-family-base: "DM Sans", sans-serif;
+  --vp-font-family-mono: "Fragment Mono", "JetBrains Mono", monospace;
+
+  --vp-code-color: #171717;
+  --vp-code-bg: #F5F5EF;
+  --vp-code-block-bg: #F5F5EF;
+  --vp-code-block-divider-color: #EAEAEA;
+
+  --vp-sidebar-bg-color: #F8F8F2;
+  --vp-sidebar-width: 260px;
+
+  --vp-nav-height: 60px;
+
+  /* Search modal backdrop */
+  --vp-backdrop-bg-color: rgba(0, 0, 0, 0.5);
+}
+
+/* ── Dark Mode ── */
+.dark {
+  --vp-c-bg: #09090B;
+  --vp-c-bg-alt: #0A0A0C;
+  --vp-c-bg-elv: #0F0F11;
+  --vp-c-bg-soft: #131315;
+
+  --vp-c-text-1: #EDEDED;
+  --vp-c-text-2: #888888;
+  --vp-c-text-3: #666666;
+
+  --vp-c-divider: #333333;
+  --vp-c-gutter: #333333;
+
+  --vp-code-color: #EDEDED;
+  --vp-code-bg: #131315;
+  --vp-code-block-bg: #131315;
+  --vp-code-block-divider-color: #333333;
+
+  --vp-sidebar-bg-color: #0A0A0C;
+}
+
+/* ── Body ── */
+body {
+  font-weight: 450;
+  line-height: 1.8;
+  word-spacing: 0.05em;
+}
+
+/* ── Heading font ── */
+.vp-doc h1,
+.vp-doc h2,
+.vp-doc h3 {
+  font-family: "DM Sans", system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.vp-doc h1 {
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 1.2;
+}
+
+.vp-doc h2 {
+  font-weight: 600;
+  font-size: 22px;
+  border-bottom: 1px solid var(--vp-c-divider);
+  padding-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+
+/* ── Inline code ── */
+.vp-doc :not(pre) > code {
+  font-size: 0.875em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--vp-c-divider);
+}
+
+/* ── Tip / Custom blocks ── */
+.vp-doc .custom-block.tip {
+  border-color: var(--vp-c-brand-1);
+  background: rgba(249, 115, 22, 0.04);
+}
+
+.dark .vp-doc .custom-block.tip {
+  background: rgba(249, 115, 22, 0.08);
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--vp-c-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--vp-c-divider);
+  border-radius: 2px;
+}
+
+/* ── Nav search button: wider and centered ── */
+.VPNavBarSearch.search {
+  flex-grow: 1 !important;
+  justify-content: center !important;
+}
+
+.VPNavBarSearch.search > div {
+  width: 100% !important;
+  max-width: 420px !important;
+}
+
+.DocSearch.DocSearch-Button {
+  width: 100% !important;
+  border-radius: 8px !important;
+  background: var(--vp-c-bg-alt) !important;
+  border: 1px solid var(--vp-c-divider) !important;
+  justify-content: space-between !important;
+  padding: 0 12px !important;
+}
+
+.DocSearch.DocSearch-Button:hover {
+  border-color: var(--vp-c-brand-1) !important;
+}
+
+/* Search button: "Search..." left, ⌘K right */
+.DocSearch-Button-Container {
+  flex: 1 !important;
+}
+
+.DocSearch-Button-Placeholder::after {
+  content: '...' !important;
+}
+
+.DocSearch-Button-Keys {
+  margin-left: auto !important;
+}
+
+/* ── Search modal: match HTML design ── */
+
+/* Override VitePress scoped styles via CSS variables */
+.VPLocalSearchBox {
+  /* Center the shell vertically and horizontally */
+  align-items: center !important;
+  justify-content: center !important;
+  /* Override the brand color used for focus border in scoped CSS */
+  --vp-c-brand-1: var(--vp-c-divider);
+}
+
+/* Shell: match HTML design modal */
+.VPLocalSearchBox .shell {
+  max-width: 580px !important;
+  width: 100% !important;
+  border-radius: 14px !important;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12) !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  z-index: 1 !important;
+}
+
+.dark .VPLocalSearchBox .shell {
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Search input area */
+.VPLocalSearchBox .search-bar {
+  padding: 16px 20px !important;
+  gap: 12px !important;
+}
+
+/* Input: 18px, clean */
+.VPLocalSearchBox .search-bar input {
+  font-size: 18px !important;
+  font-family: var(--vp-font-family-base) !important;
+}
+
+/* Hide search action buttons (detail list / reset) */
+.VPLocalSearchBox .search-actions {
+  display: none !important;
+}
+
+/* Hide bottom keyboard shortcuts */
+.VPLocalSearchBox .search-keyboard-shortcuts {
+  display: none !important;
+}
+
+/* Results container */
+.VPLocalSearchBox .results {
+  max-height: 400px !important;
+  padding: 8px 0 !important;
+}
+
+/* Individual result items */
+.VPLocalSearchBox .result {
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 12px 20px !important;
+  margin: 0 !important;
+}
+
+/* Selected result: subtle gray background, no orange */
+.VPLocalSearchBox .result.selected,
+.VPLocalSearchBox .result:hover {
+  background: var(--vp-c-bg-soft) !important;
+  border: none !important;
+  border-color: transparent !important;
+}
+
+/* Result titles */
+.VPLocalSearchBox .result .title {
+  font-weight: 600 !important;
+  font-size: 15px !important;
+}
+
+/* Result excerpt/preview text */
+.VPLocalSearchBox .result .excerpt {
+  color: var(--vp-c-text-2) !important;
+  font-size: 13px !important;
+}
+
+/* Highlighted match text in results */
+.VPLocalSearchBox .result mark {
+  color: var(--vp-c-text-1) !important;
+  background: none !important;
+  text-decoration: underline !important;
+}
+
+/* Remove dividers between results */
+.VPLocalSearchBox .result + .result {
+  border-top: none !important;
+}
+
+/* ── Sidebar active link ── */
+.VPSidebarItem.is-active > .item > .link > .text {
+  color: var(--vp-c-brand-1);
+}
+
+/* ── Content max width ── */
+.vp-doc {
+  max-width: 800px;
+}
+
+/* ── Bottom paragraph spacing ── */
+.vp-doc p {
+  margin-bottom: 16px;
+}
+
+.vp-doc li {
+  margin-bottom: 6px;
+}
