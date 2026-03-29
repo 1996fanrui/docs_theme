@@ -6,6 +6,8 @@
   "description": "Docker-backed sandbox control plane",
   "accent": "#3B82F6",
   "github": "https://github.com/1996fanrui/agents-sandbox",
+  "url": "https://docs.agents-sandbox.com",
+  "cfPagesProject": "agents-sandbox-docs",
   "sidebar": [
     {
       "text": "Getting Started",

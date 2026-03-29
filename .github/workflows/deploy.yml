@@ -1,0 +1,54 @@
+name: Deploy to Cloudflare Pages
+
+on:
+  workflow_dispatch:
+    inputs:
+      project:
+        description: 'Target project'
+        required: true
+        default: 'agents-sandbox'
+        type: choice
+        options:
+          - agents-sandbox
+      target_repo_branch:
+        description: 'Target project branch'
+        required: true
+        default: 'main'
+        type: string
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout docs_theme
+        uses: actions/checkout@v4
+
+      - name: Checkout target project
+        uses: actions/checkout@v4
+        with:
+          repository: 1996fanrui/${{ inputs.project }}
+          ref: ${{ inputs.target_repo_branch }}
+          path: .target-repo
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build
+        run: ./scripts/build.sh ${{ inputs.project }} .target-repo
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy .docs-src/${{ inputs.project }}/.vitepress/dist --project-name=${{ inputs.project }}-docs
