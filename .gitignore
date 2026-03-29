@@ -3,3 +3,6 @@ node_modules/
 .docs-content/
 .vitepress/cache/
 .vitepress/dist/
+
+.agents
+.claude
