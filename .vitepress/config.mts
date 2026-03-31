@@ -29,9 +29,7 @@ export default withMermaid(defineConfig({
   themeConfig: {
     siteTitle: projectConfig.name,
 
-    nav: [
-      { text: 'Docs', link: projectConfig.sidebar?.[0]?.items?.[0]?.link || '/' },
-    ],
+    nav: [],
 
     sidebar: projectConfig.sidebar,
 
