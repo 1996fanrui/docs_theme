@@ -31,7 +31,6 @@ export default withMermaid(defineConfig({
 
     nav: [
       { text: 'Docs', link: projectConfig.sidebar?.[0]?.items?.[0]?.link || '/' },
-      { text: 'GitHub', link: projectConfig.github },
     ],
 
     sidebar: projectConfig.sidebar,
