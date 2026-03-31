@@ -270,7 +270,11 @@ body {
   margin-bottom: 6px;
 }
 
-/* ── Social link: show "GitHub" text next to icon ── */
+/* ── Social link: show "GitHub" text next to icon, before appearance toggle ── */
+.VPNavBarAppearance.appearance {
+  order: 1;
+}
+
 .VPSocialLink[href*="github.com"] {
   display: flex;
   align-items: center;
