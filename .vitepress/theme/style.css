@@ -269,3 +269,23 @@ body {
 .vp-doc li {
   margin-bottom: 6px;
 }
+
+/* ── Social link: show "GitHub" text next to icon ── */
+.VPSocialLink[href*="github.com"] {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: auto !important;
+}
+
+.VPSocialLink[href*="github.com"]::after {
+  content: 'GitHub';
+  font-family: var(--vp-font-family-base);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--vp-c-text-2);
+}
+
+.VPSocialLink[href*="github.com"]:hover::after {
+  color: var(--vp-c-text-1);
+}
