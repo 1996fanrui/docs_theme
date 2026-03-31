@@ -278,8 +278,10 @@ body {
 .VPSocialLink[href*="github.com"] {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 4px;
   width: auto !important;
+  padding: 0 8px !important;
 }
 
 .VPSocialLink[href*="github.com"]::after {
