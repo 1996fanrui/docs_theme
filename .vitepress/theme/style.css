@@ -227,16 +227,27 @@ body {
   border-color: transparent !important;
 }
 
-/* Result titles */
+/* Result titles: keep readable on hover */
 .VPLocalSearchBox .result .title {
   font-weight: 600 !important;
   font-size: 15px !important;
+  color: var(--vp-c-text-1) !important;
 }
 
-/* Result excerpt/preview text */
+/* Result excerpt/preview text: keep readable on hover */
 .VPLocalSearchBox .result .excerpt {
   color: var(--vp-c-text-2) !important;
   font-size: 13px !important;
+}
+
+.VPLocalSearchBox .result.selected .title,
+.VPLocalSearchBox .result:hover .title {
+  color: var(--vp-c-text-1) !important;
+}
+
+.VPLocalSearchBox .result.selected .excerpt,
+.VPLocalSearchBox .result:hover .excerpt {
+  color: var(--vp-c-text-2) !important;
 }
 
 /* Highlighted match text in results */
