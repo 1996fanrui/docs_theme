@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import { withMermaid } from 'vitepress-plugin-mermaid'
 import fs from 'fs'
 import path from 'path'
 
@@ -8,7 +9,7 @@ const project = process.env.PROJECT || 'zero-qa'
 const projectConfigPath = path.resolve(__dirname, `../.docs-src/${project}/theme.json`)
 const projectConfig = JSON.parse(fs.readFileSync(projectConfigPath, 'utf-8'))
 
-export default defineConfig({
+export default withMermaid(defineConfig({
   title: projectConfig.name,
   description: projectConfig.description,
   base: projectConfig.base || '/',
@@ -48,4 +49,7 @@ export default defineConfig({
       label: 'On this page',
     },
   },
-})
+
+  // Mermaid diagram rendering
+  mermaid: {},
+}))
