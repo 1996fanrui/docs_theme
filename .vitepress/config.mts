@@ -50,7 +50,7 @@ export default withMermaid(defineConfig({
   mermaid: {
     theme: 'default',
     themeVariables: {
-      fontFamily: '"DM Sans", sans-serif',
+      fontFamily: 'sans-serif',
     },
   },
 }))
