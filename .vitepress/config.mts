@@ -47,6 +47,10 @@ export default withMermaid(defineConfig({
     },
   },
 
-  // Mermaid diagram rendering
-  mermaid: {},
+  mermaid: {
+    theme: 'default',
+    themeVariables: {
+      fontFamily: '"DM Sans", sans-serif',
+    },
+  },
 }))
