@@ -52,5 +52,8 @@ export default withMermaid(defineConfig({
     themeVariables: {
       fontFamily: 'sans-serif',
     },
+    flowchart: {
+      padding: 15,
+    },
   },
 }))
