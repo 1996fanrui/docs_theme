@@ -24,10 +24,12 @@ export default withMermaid(defineConfig({
 
   head: [
     ['link', { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;600;700&family=Fragment+Mono:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap' }],
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }],
   ],
 
   themeConfig: {
     siteTitle: projectConfig.name,
+    logo: '/logo.svg',
 
     nav: [],
 

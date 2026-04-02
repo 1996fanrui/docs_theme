@@ -41,6 +41,11 @@ cp "$THEME_JSON" "$DOCS_SRC/theme.json"
 DOCS_DIR=$(node -e "console.log(JSON.parse(require('fs').readFileSync('$THEME_JSON','utf8')).docsDir)")
 cp "$LOCAL_REPO/$DOCS_DIR"/*.md "$DOCS_SRC/"
 
+# Copy public assets (favicon, logo, images) if present
+if [ -d "$LOCAL_REPO/$DOCS_DIR/public" ]; then
+  cp -r "$LOCAL_REPO/$DOCS_DIR/public" "$DOCS_SRC/public"
+fi
+
 # Copy first doc as index.md so homepage shows first doc directly
 FIRST_DOC=$(node -e "const c=JSON.parse(require('fs').readFileSync('$THEME_JSON','utf8'));const l=c.sidebar?.[0]?.items?.[0]?.link||'';console.log(l.replace(/^\//,''))")
 if [ -f "$DOCS_SRC/${FIRST_DOC}.md" ]; then
