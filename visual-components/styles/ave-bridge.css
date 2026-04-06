@@ -1,0 +1,143 @@
+/*
+ * CSS variable bridge: maps --ave-* to VitePress --vp-* variables.
+ *
+ * Import this in .vitepress/theme/index.ts after style.css.
+ * Components automatically adapt to the VitePress theme (light/dark mode).
+ */
+
+:root {
+  --ave-font-family: var(--vp-font-family-base);
+  --ave-font-family-mono: var(--vp-font-family-mono);
+  --ave-text-primary: var(--vp-c-text-1);
+  --ave-text-secondary: var(--vp-c-text-2);
+  --ave-text-muted: var(--vp-c-text-3);
+  --ave-hero-size: 28px;
+  --ave-title-size: 22px;
+  --ave-subtitle-size: 17px;
+  --ave-body-size: 15px;
+  --ave-small-size: 13px;
+  --ave-code-size: 13px;
+  --ave-body-padding: 0;
+  --ave-card-radius: 12px;
+  --ave-card-bg: var(--vp-c-bg-soft);
+  --ave-card-bg-light: var(--vp-c-bg-soft);
+  --ave-accent: var(--vp-c-brand-1);
+  --ave-accent-bg: var(--vp-c-brand-soft);
+  --ave-color-good: #16a34a;
+  --ave-color-bad: #dc2626;
+
+  /* -- Structural colors -- */
+  --ave-border-color: rgba(0, 0, 0, 0.06);
+  --ave-line-color: #888;
+  --ave-code-bg: rgba(0, 0, 0, 0.08);
+  --ave-dashed-border-color: rgba(0, 0, 0, 0.1);
+
+  /* -- Semantic palette: warm (warning/caution) -- */
+  --ave-warm-bg: rgba(255, 247, 237, 0.75);
+  --ave-warm-border: rgba(245, 158, 66, 0.35);
+  --ave-warm-text: #b45309;
+
+  /* -- Semantic palette: danger -- */
+  --ave-danger-bg: rgba(254, 226, 226, 0.75);
+  --ave-danger-border: rgba(220, 38, 38, 0.35);
+  --ave-danger-text: #991b1b;
+  --ave-danger-text-alt: #9a3412;
+
+  /* -- Semantic palette: safe/success (green) -- */
+  --ave-safe-bg: rgba(240, 253, 244, 0.75);
+  --ave-safe-border: rgba(16, 185, 129, 0.25);
+  --ave-safe-text: #047857;
+  --ave-safe-line: #10b981;
+
+  /* -- Semantic palette: host (red-tinted) -- */
+  --ave-host-bg: rgba(254, 242, 242, 0.75);
+  --ave-host-border: rgba(239, 68, 68, 0.2);
+  --ave-host-text: #b91c1c;
+
+  /* -- Semantic palette: blue zone -- */
+  --ave-zone-blue-bg: rgba(233, 238, 255, 0.75);
+  --ave-zone-blue-border: rgba(29, 78, 216, 0.3);
+  --ave-zone-blue-text: #2563eb;
+  --ave-zone-blue-bg-solid: rgba(233, 238, 255, 0.95);
+
+  /* -- Semantic palette: green zone -- */
+  --ave-zone-green-bg: rgba(235, 250, 240, 0.75);
+  --ave-zone-green-border: rgba(52, 168, 83, 0.3);
+  --ave-zone-green-text: #16a34a;
+
+  /* -- Icon badge backgrounds -- */
+  --ave-badge-blocked: rgba(220, 38, 38, 0.12);
+  --ave-badge-inject: rgba(139, 92, 246, 0.12);
+  --ave-badge-allowed: rgba(52, 168, 83, 0.12);
+  --ave-badge-clean: rgba(232, 113, 26, 0.12);
+
+  /* -- Instance colors (parallel isolated) -- */
+  --ave-instance-green-bg: rgba(235, 250, 240, 0.75);
+  --ave-instance-green-border: rgba(52, 168, 83, 0.3);
+  --ave-instance-blue-bg: rgba(235, 245, 255, 0.75);
+  --ave-instance-blue-border: rgba(91, 155, 213, 0.3);
+  --ave-instance-yellow-bg: rgba(255, 250, 235, 0.75);
+  --ave-instance-yellow-border: rgba(244, 180, 0, 0.3);
+  --ave-instance-perm-bg: rgba(16, 185, 129, 0.08);
+  --ave-instance-perm-text: #047857;
+}
+
+.dark {
+  --ave-color-good: #4ade80;
+  --ave-color-bad: #f87171;
+
+  /* -- Structural colors -- */
+  --ave-border-color: rgba(255, 255, 255, 0.08);
+  --ave-line-color: #666;
+  --ave-code-bg: rgba(255, 255, 255, 0.1);
+  --ave-dashed-border-color: rgba(255, 255, 255, 0.12);
+
+  /* -- Semantic palette: warm -- */
+  --ave-warm-bg: rgba(180, 83, 9, 0.15);
+  --ave-warm-border: rgba(245, 158, 66, 0.3);
+  --ave-warm-text: #fbbf24;
+
+  /* -- Semantic palette: danger -- */
+  --ave-danger-bg: rgba(220, 38, 38, 0.12);
+  --ave-danger-border: rgba(220, 38, 38, 0.3);
+  --ave-danger-text: #f87171;
+  --ave-danger-text-alt: #fb923c;
+
+  /* -- Semantic palette: safe -- */
+  --ave-safe-bg: rgba(16, 185, 129, 0.12);
+  --ave-safe-border: rgba(16, 185, 129, 0.25);
+  --ave-safe-text: #4ade80;
+  --ave-safe-line: #34d399;
+
+  /* -- Semantic palette: host -- */
+  --ave-host-bg: rgba(239, 68, 68, 0.1);
+  --ave-host-border: rgba(239, 68, 68, 0.2);
+  --ave-host-text: #f87171;
+
+  /* -- Semantic palette: blue zone -- */
+  --ave-zone-blue-bg: rgba(29, 78, 216, 0.15);
+  --ave-zone-blue-border: rgba(59, 130, 246, 0.3);
+  --ave-zone-blue-text: #60a5fa;
+  --ave-zone-blue-bg-solid: rgba(29, 78, 216, 0.3);
+
+  /* -- Semantic palette: green zone -- */
+  --ave-zone-green-bg: rgba(52, 168, 83, 0.15);
+  --ave-zone-green-border: rgba(52, 168, 83, 0.3);
+  --ave-zone-green-text: #4ade80;
+
+  /* -- Icon badge backgrounds -- */
+  --ave-badge-blocked: rgba(239, 68, 68, 0.2);
+  --ave-badge-inject: rgba(139, 92, 246, 0.2);
+  --ave-badge-allowed: rgba(52, 168, 83, 0.2);
+  --ave-badge-clean: rgba(232, 113, 26, 0.2);
+
+  /* -- Instance colors -- */
+  --ave-instance-green-bg: rgba(52, 168, 83, 0.15);
+  --ave-instance-green-border: rgba(52, 168, 83, 0.3);
+  --ave-instance-blue-bg: rgba(59, 130, 246, 0.15);
+  --ave-instance-blue-border: rgba(91, 155, 213, 0.3);
+  --ave-instance-yellow-bg: rgba(244, 180, 0, 0.15);
+  --ave-instance-yellow-border: rgba(244, 180, 0, 0.3);
+  --ave-instance-perm-bg: rgba(16, 185, 129, 0.15);
+  --ave-instance-perm-text: #4ade80;
+}
