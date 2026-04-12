@@ -2,6 +2,10 @@
   component: AveInstance
   structure: Single isolated instance column with name, icon, agent, task and permission badge
   notes: Used inside AveParallelIsolated. Color determines the background palette.
+  usage-markdown: |
+    <AveInstance name="Agent-1" icon="🤖" agent="Claude" task="Code review" perm="read-only" color="green" />
+  usage-json: |
+    { "component": "AveInstance", "props": { "name": "Agent-1", "icon": "🤖", "agent": "Claude", "task": "Code review", "perm": "read-only", "color": "green" } }
 -->
 <script setup lang="ts">
 defineProps<{

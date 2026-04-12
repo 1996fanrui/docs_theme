@@ -2,10 +2,33 @@
   component: AveCodeblock
   structure: macOS-style terminal code block with window chrome dots and syntax highlighting
   notes: Syntax highlight colors are intentionally hardcoded (code theme, not affected by --ave-* variables).
+         Each line is an array of segments with optional token type for syntax coloring.
+  usage-markdown: |
+    <AveCodeblock lang="python" :lines='[
+      [{"text":"def ","token":"kw"},{"text":"hello","token":"fn"},{"text":"():"}],
+      [{"text":"    return ","token":"kw"},{"text":"\"world\"","token":"str"}]
+    ]' />
+  usage-json: |
+    {
+      "component": "AveCodeblock",
+      "props": {
+        "lang": "python",
+        "lines": [
+          [{"text":"def ","token":"kw"},{"text":"hello","token":"fn"},{"text":"():"}],
+          [{"text":"    return ","token":"kw"},{"text":"\"world\"","token":"str"}]
+        ]
+      }
+    }
 -->
 <script setup lang="ts">
+interface Segment {
+  text: string
+  token?: 'kw' | 'fn' | 'str' | 'cmt' | 'cls' | 'op' | 'num' | 'param' | 'self' | 'await'
+}
+
 defineProps<{
   lang?: string
+  lines: Segment[][]
 }>()
 </script>
 
@@ -18,7 +41,8 @@ defineProps<{
       <div v-if="lang" class="lang-label">{{ lang }}</div>
     </div>
     <div class="code-body">
-      <slot />
+      <pre><template v-for="(line, li) in lines" :key="li"><template v-for="(seg, si) in line" :key="si"><span v-if="seg.token" :class="seg.token">{{ seg.text }}</span><template v-else>{{ seg.text }}</template></template>
+</template></pre>
     </div>
   </div>
 </template>
@@ -50,7 +74,7 @@ defineProps<{
   font-family: var(--ave-font-family-mono);
 }
 .code-body { padding: 20px 22px; overflow-x: auto; }
-.code-body :deep(pre) {
+pre {
   margin: 0;
   font-family: var(--ave-font-family-mono);
   font-size: var(--ave-code-size);
@@ -60,14 +84,14 @@ defineProps<{
   tab-size: 4;
 }
 /* Syntax colors (code theme, intentionally hardcoded) */
-.code-body :deep(.kw) { color: #c792ea; }
-.code-body :deep(.fn) { color: #82aaff; }
-.code-body :deep(.str) { color: #c3e88d; }
-.code-body :deep(.cmt) { color: #676e95; }
-.code-body :deep(.cls) { color: #ffcb6b; }
-.code-body :deep(.op) { color: #89ddff; }
-.code-body :deep(.num) { color: #f78c6c; }
-.code-body :deep(.param) { color: #e4e4e8; }
-.code-body :deep(.self) { color: #f07178; }
-.code-body :deep(.await) { color: #c792ea; font-style: italic; }
+.kw { color: #c792ea; }
+.fn { color: #82aaff; }
+.str { color: #c3e88d; }
+.cmt { color: #676e95; }
+.cls { color: #ffcb6b; }
+.op { color: #89ddff; }
+.num { color: #f78c6c; }
+.param { color: #e4e4e8; }
+.self { color: #f07178; }
+.await { color: #c792ea; font-style: italic; }
 </style>

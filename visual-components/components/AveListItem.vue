@@ -2,18 +2,33 @@
   component: AveListItem
   structure: Single row item with circular icon, title and description
   notes: Used inside AveVerticalList. Alternating backgrounds handled by parent.
+  usage-markdown: |
+    <AveListItem icon="📦" bg="rgba(66,133,244,0.15)" title="Packaging">
+      Description text (slot content)
+    </AveListItem>
+  usage-json: |
+    { "component": "AveListItem", "props": { "icon": "📦", "bg": "rgba(66,133,244,0.15)", "title": "Packaging" }, "slot": "Description text" }
 -->
 <script setup lang="ts">
-defineProps<{
+import { computed } from 'vue'
+
+const props = defineProps<{
   icon: string
   bg: string
   title: string
 }>()
+
+// Derive dark-mode icon background (boost alpha for visibility)
+const darkIconBg = computed(() => {
+  const m = props.bg.match(/rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)/)
+  if (!m) return undefined
+  return `rgba(${m[1]}, ${m[2]}, ${m[3]}, 0.25)`
+})
 </script>
 
 <template>
-  <div class="ave-item">
-    <div class="icon" :style="{ background: bg }">{{ icon }}</div>
+  <div class="ave-item" :style="{ '--_icon-bg': bg, '--_icon-bg-dark': darkIconBg }">
+    <div class="icon">{{ icon }}</div>
     <div class="text">
       <h3>{{ title }}</h3>
       <p><slot /></p>
@@ -37,6 +52,10 @@ defineProps<{
   align-items: center;
   justify-content: center;
   font-size: 24px;
+  background: var(--_icon-bg);
+}
+:global(.dark) .icon {
+  background: var(--_icon-bg-dark, var(--_icon-bg)) !important;
 }
 .text { flex: 1; min-width: 0; }
 .text h3 {

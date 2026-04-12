@@ -2,6 +2,20 @@
   component: AveParallelIsolated + AveInstance
   structure: N parallel independent instances with isolation walls between them
   notes: AveInstance children in default slot. Walls auto-generated between instances.
+  usage-markdown: |
+    <AveParallelIsolated title="Parallel Agents" subtitle="Each runs independently" note="Fully isolated">
+      <AveInstance name="Agent-1" icon="🤖" agent="Claude" task="Code review" perm="read-only" color="green" />
+      <AveInstance name="Agent-2" icon="🔧" agent="Codex" task="Bug fix" perm="read-write" color="blue" />
+    </AveParallelIsolated>
+  usage-json: |
+    {
+      "component": "AveParallelIsolated",
+      "props": { "title": "Parallel Agents", "subtitle": "Each runs independently", "note": "Fully isolated" },
+      "children": [
+        { "component": "AveInstance", "props": { "name": "Agent-1", "icon": "🤖", "agent": "Claude", "task": "Code review", "perm": "read-only", "color": "green" } },
+        { "component": "AveInstance", "props": { "name": "Agent-2", "icon": "🔧", "agent": "Codex", "task": "Bug fix", "perm": "read-write", "color": "blue" } }
+      ]
+    }
 -->
 <script setup lang="ts">
 import { useSlots, computed } from 'vue'
