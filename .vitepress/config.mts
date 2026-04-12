@@ -20,6 +20,9 @@ export default withMermaid(defineConfig({
     server: {
       allowedHosts: true,
     },
+    optimizeDeps: {
+      include: ['mermaid', 'dayjs'],
+    },
   },
 
   head: [
