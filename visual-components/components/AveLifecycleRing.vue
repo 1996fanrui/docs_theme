@@ -2,6 +2,24 @@
   component: AveLifecycleRing + AveNode
   structure: Circular lifecycle diagram with 4 icon nodes, connecting arrows, and center text
   notes: Uses SVG for circular arrows. AveNode children positioned absolutely around the ring.
+  usage-markdown: |
+    <AveLifecycleRing title="DevOps Cycle" centerLine1="CI/CD" centerLine2="Continuous">
+      <AveNode icon="📝" label="Plan" position="top" color="blue" />
+      <AveNode icon="🔨" label="Build" position="right" color="green" />
+      <AveNode icon="🚀" label="Deploy" position="bottom" color="yellow" />
+      <AveNode icon="📊" label="Monitor" position="left" color="orange" />
+    </AveLifecycleRing>
+  usage-json: |
+    {
+      "component": "AveLifecycleRing",
+      "props": { "title": "DevOps Cycle", "centerLine1": "CI/CD", "centerLine2": "Continuous" },
+      "children": [
+        { "component": "AveNode", "props": { "icon": "📝", "label": "Plan", "position": "top", "color": "blue" } },
+        { "component": "AveNode", "props": { "icon": "🔨", "label": "Build", "position": "right", "color": "green" } },
+        { "component": "AveNode", "props": { "icon": "🚀", "label": "Deploy", "position": "bottom", "color": "yellow" } },
+        { "component": "AveNode", "props": { "icon": "📊", "label": "Monitor", "position": "left", "color": "orange" } }
+      ]
+    }
 -->
 <script setup lang="ts">
 defineProps<{

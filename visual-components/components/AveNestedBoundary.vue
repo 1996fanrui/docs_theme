@@ -1,14 +1,53 @@
 <!--
-  component: AveNestedBoundary + AveBoundaryItem
+  component: AveNestedBoundary
   structure: Nested container diagram — outer boundary (host) containing inner isolated element (sandbox)
-  notes: Two named sections via props. AveBoundaryItem used for both host and sandbox items.
+  notes: Fully data-driven through props. Each item has icon, badge, title and description.
+  usage-markdown: |
+    <AveNestedBoundary hostLabel="🖥️ Host" hostSubtitle="Accessible resources"
+                       sandboxLabel="🔒 Sandbox" isolationLabel="Isolation Boundary"
+      :hostItems='[
+        {"icon":"📁","badge":"blocked","title":"File System","desc":"Restricted access"},
+        {"icon":"🌐","badge":"allowed","title":"Network","desc":"Allowed with limits"}
+      ]'
+      :sandboxItems='[
+        {"icon":"📦","badge":"clean","title":"Dependencies","desc":"Clean environment"},
+        {"icon":"⚙️","badge":"inject","title":"Config","desc":"Injected at start"}
+      ]'
+    />
+  usage-json: |
+    {
+      "component": "AveNestedBoundary",
+      "props": {
+        "hostLabel": "🖥️ Host",
+        "hostSubtitle": "Accessible resources",
+        "sandboxLabel": "🔒 Sandbox",
+        "isolationLabel": "Isolation Boundary",
+        "hostItems": [
+          {"icon":"📁","badge":"blocked","title":"File System","desc":"Restricted access"},
+          {"icon":"🌐","badge":"allowed","title":"Network","desc":"Allowed with limits"}
+        ],
+        "sandboxItems": [
+          {"icon":"📦","badge":"clean","title":"Dependencies","desc":"Clean environment"},
+          {"icon":"⚙️","badge":"inject","title":"Config","desc":"Injected at start"}
+        ]
+      }
+    }
 -->
 <script setup lang="ts">
+interface BoundaryItem {
+  icon: string
+  badge: 'blocked' | 'inject' | 'allowed' | 'clean'
+  title: string
+  desc: string
+}
+
 defineProps<{
   hostLabel: string
   hostSubtitle?: string
   sandboxLabel: string
   isolationLabel?: string
+  hostItems: BoundaryItem[]
+  sandboxItems: BoundaryItem[]
 }>()
 </script>
 
@@ -18,7 +57,10 @@ defineProps<{
     <div class="content">
       <div class="host-items">
         <div v-if="hostSubtitle" class="host-subtitle">{{ hostSubtitle }}</div>
-        <slot name="host-items" />
+        <div v-for="item in hostItems" :key="item.title" class="boundary-item">
+          <div class="icon-badge" :class="item.badge">{{ item.icon }}</div>
+          <div><strong>{{ item.title }}</strong><br />{{ item.desc }}</div>
+        </div>
       </div>
 
       <div class="isolation-border">
@@ -26,7 +68,10 @@ defineProps<{
         <div class="sandbox">
           <div class="sandbox-label">{{ sandboxLabel }}</div>
           <div class="sandbox-items">
-            <slot name="sandbox-items" />
+            <div v-for="item in sandboxItems" :key="item.title" class="boundary-item">
+              <div class="icon-badge" :class="item.badge">{{ item.icon }}</div>
+              <div><strong>{{ item.title }}</strong><br />{{ item.desc }}</div>
+            </div>
           </div>
         </div>
       </div>
@@ -77,4 +122,27 @@ defineProps<{
   margin-bottom: 16px; display: flex; align-items: center; gap: 10px;
 }
 .sandbox-items { display: flex; flex-direction: column; gap: 6px; }
+
+/* -- Boundary item (inline, no longer a separate component dependency) -- */
+.boundary-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: var(--ave-subtitle-size);
+  line-height: 1.4;
+  color: var(--ave-text-secondary);
+  word-break: break-word;
+}
+.icon-badge {
+  flex-shrink: 0;
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+.blocked { background: var(--ave-badge-blocked); }
+.inject { background: var(--ave-badge-inject); }
+.allowed { background: var(--ave-badge-allowed); }
+.clean { background: var(--ave-badge-clean); }
+.boundary-item strong { font-weight: 600; color: var(--ave-text-primary); }
 </style>

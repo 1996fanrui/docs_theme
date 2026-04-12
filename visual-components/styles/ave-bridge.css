@@ -83,6 +83,8 @@
 }
 
 .dark {
+  --ave-accent-bg: rgba(100, 160, 255, 0.12);
+  --ave-accent-contrast: #fff;
   --ave-color-good: #4ade80;
   --ave-color-bad: #f87171;
 

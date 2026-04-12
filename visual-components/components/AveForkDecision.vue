@@ -1,10 +1,48 @@
 <!--
   component: AveForkDecision
   structure: Binary decision flow diagram — top question forks into two options with consequences, bottom verdict
-  notes: SVG-free implementation using CSS borders for fork lines and arrows.
+  notes: |
+    SVG-free implementation using CSS borders for fork lines and arrows.
+    leftTheme/rightTheme/verdictTheme accept semantic color names: warm, danger, safe, host, zone-blue, zone-green.
+    These map to --ave-{theme}-bg/border/text CSS variables, which have both light and dark mode values.
+  usage-markdown: |
+    <AveForkDecision
+      question="Which approach?"
+      leftLabel="Option A" leftTheme="warm"
+      rightLabel="Option B" rightTheme="safe"
+      :leftItems='[{"name":"Tool X","detail":"--flag-a"}]'
+      :rightItems='[{"name":"Tool Y","detail":"--flag-b"}]'
+      :leftConsequence='{"icon":"⚠️","text":"Limited scope"}'
+      :rightConsequence='{"icon":"✅","text":"Full access"}'
+      leftCross="❌"
+      rightCross="✅"
+      verdictMain="Choose B"
+      verdictSub="Better coverage"
+      verdictTheme="safe"
+    />
+  usage-json: |
+    {
+      "component": "AveForkDecision",
+      "props": {
+        "question": "Which approach?",
+        "leftLabel": "Option A", "leftTheme": "warm",
+        "rightLabel": "Option B", "rightTheme": "safe",
+        "leftItems": [{"name":"Tool X","detail":"--flag-a"}],
+        "rightItems": [{"name":"Tool Y","detail":"--flag-b"}],
+        "leftConsequence": {"icon":"⚠️","text":"Limited scope"},
+        "rightConsequence": {"icon":"✅","text":"Full access"},
+        "leftCross": "❌",
+        "rightCross": "✅",
+        "verdictMain": "Choose B",
+        "verdictSub": "Better coverage",
+        "verdictTheme": "safe"
+      }
+    }
 -->
 <script setup lang="ts">
-defineProps<{
+type Theme = 'warm' | 'danger' | 'safe' | 'host' | 'zone-blue' | 'zone-green'
+
+const props = withDefaults(defineProps<{
   question: string
   leftLabel: string
   rightLabel: string
@@ -16,7 +54,23 @@ defineProps<{
   rightCross?: string
   verdictMain: string
   verdictSub?: string
-}>()
+  leftTheme?: Theme
+  rightTheme?: Theme
+  verdictTheme?: Theme
+}>(), {
+  leftTheme: 'warm',
+  rightTheme: 'danger',
+  verdictTheme: 'danger',
+})
+
+// Map theme name to CSS variable references
+function themeVars(theme: Theme) {
+  return {
+    '--_theme-bg': `var(--ave-${theme}-bg)`,
+    '--_theme-border': `var(--ave-${theme}-border)`,
+    '--_theme-text': `var(--ave-${theme}-text)`,
+  }
+}
 </script>
 
 <template>
@@ -30,29 +84,29 @@ defineProps<{
       <div class="bar"></div>
       <div class="drop-left"></div>
       <div class="drop-right"></div>
-      <div class="label-left">{{ leftLabel }}</div>
-      <div class="label-right">{{ rightLabel }}</div>
+      <div class="label-left" :style="{ color: `var(--ave-${leftTheme}-text)` }">{{ leftLabel }}</div>
+      <div class="label-right" :style="{ color: `var(--ave-${rightTheme}-text)` }">{{ rightLabel }}</div>
     </div>
 
     <div class="paths">
-      <div class="path restrict">
+      <div class="path" :style="themeVars(leftTheme)">
         <div v-for="item in leftItems" :key="item.name" class="tool-item">
           <div class="tool-name">{{ item.name }}</div>
           <div class="tool-detail"><code>{{ item.detail }}</code></div>
         </div>
         <div class="consequence">
           <div class="consequence-icon">{{ leftConsequence.icon }}</div>
-          <div class="consequence-text restrict-text" v-html="leftConsequence.text"></div>
+          <div class="consequence-text" v-html="leftConsequence.text"></div>
         </div>
       </div>
-      <div class="path full-open">
+      <div class="path" :style="themeVars(rightTheme)">
         <div v-for="item in rightItems" :key="item.name" class="tool-item">
           <div class="tool-name">{{ item.name }}</div>
           <div class="tool-detail"><code>{{ item.detail }}</code></div>
         </div>
         <div class="consequence">
           <div class="consequence-icon">{{ rightConsequence.icon }}</div>
-          <div class="consequence-text open-text" v-html="rightConsequence.text"></div>
+          <div class="consequence-text" v-html="rightConsequence.text"></div>
         </div>
       </div>
     </div>
@@ -63,7 +117,7 @@ defineProps<{
         <div class="cross-col">{{ rightCross }}</div>
       </div>
       <div class="verdict">
-        <div class="verdict-box">
+        <div class="verdict-box" :style="themeVars(verdictTheme)">
           <div class="main">{{ verdictMain }}</div>
           <div v-if="verdictSub" class="sub">{{ verdictSub }}</div>
         </div>
@@ -104,13 +158,11 @@ defineProps<{
   position: absolute; top: 23px; font-size: var(--ave-body-size); font-weight: 700;
   padding: 2px 8px; border-radius: 6px; background: var(--ave-card-bg); white-space: nowrap;
 }
-.fork-area .label-left { left: 12%; transform: translateX(16px); color: var(--ave-warm-text); }
-.fork-area .label-right { right: 12%; transform: translateX(-16px); color: var(--ave-danger-text-alt); }
+.fork-area .label-left { left: 12%; transform: translateX(16px); }
+.fork-area .label-right { right: 12%; transform: translateX(-16px); }
 
 .paths { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 8px; }
-.path { border-radius: var(--ave-card-radius); padding: 24px 28px; }
-.path.restrict { background: var(--ave-warm-bg); border: 2px solid var(--ave-warm-border); }
-.path.full-open { background: var(--ave-warm-bg); border: 2px solid var(--ave-danger-border); }
+.path { border-radius: var(--ave-card-radius); padding: 24px 28px; background: var(--_theme-bg); border: 2px solid var(--_theme-border); }
 .tool-item { margin-bottom: 14px; }
 .tool-item:last-child { margin-bottom: 0; }
 .tool-name {
@@ -126,9 +178,7 @@ defineProps<{
   padding-top: 14px; border-top: 1px dashed var(--ave-dashed-border-color);
 }
 .consequence-icon { font-size: var(--ave-title-size); flex-shrink: 0; }
-.consequence-text { font-size: var(--ave-body-size); font-weight: 600; line-height: 1.4; }
-.restrict-text { color: var(--ave-warm-text); }
-.open-text { color: var(--ave-danger-text-alt); }
+.consequence-text { font-size: var(--ave-body-size); font-weight: 600; line-height: 1.4; color: var(--_theme-text); }
 
 .bottom-block { position: relative; display: flex; flex-direction: column; align-items: center; gap: 0; }
 .crosses-row { display: flex; width: 100%; margin-bottom: 6px; }
@@ -136,12 +186,12 @@ defineProps<{
 .verdict { text-align: center; margin-top: 8px; }
 .verdict-box {
   display: inline-block;
-  background: var(--ave-danger-bg); border: 2px solid var(--ave-danger-border);
+  background: var(--_theme-bg); border: 2px solid var(--_theme-border);
   border-radius: var(--ave-card-radius); padding: 16px 48px;
 }
 .verdict-box .main {
-  font-size: var(--ave-hero-size); font-weight: 400;
-  -webkit-text-stroke: 0.6px var(--ave-danger-text); color: var(--ave-danger-text); letter-spacing: 1px; margin-bottom: 4px;
+  font-size: var(--ave-title-size); font-weight: 400;
+  -webkit-text-stroke: 0.6px var(--_theme-text); color: var(--_theme-text); letter-spacing: 1px; margin-bottom: 4px;
 }
 .verdict-box .sub { font-size: var(--ave-body-size); color: var(--ave-text-secondary); }
 </style>

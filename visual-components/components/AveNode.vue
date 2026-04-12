@@ -2,6 +2,10 @@
   component: AveNode
   structure: Single lifecycle node with icon circle and label, positioned around a ring
   notes: Used inside AveLifecycleRing. Position (top/right/bottom/left) and color determine placement.
+  usage-markdown: |
+    <AveNode icon="📝" label="Plan" position="top" color="blue" />
+  usage-json: |
+    { "component": "AveNode", "props": { "icon": "📝", "label": "Plan", "position": "top", "color": "blue" } }
 -->
 <script setup lang="ts">
 const positionStyles: Record<string, { icon: Record<string, string>; label: Record<string, string> }> = {

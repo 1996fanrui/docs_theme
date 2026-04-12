@@ -2,6 +2,44 @@
   component: AveFlowContrast
   structure: Vertical comparison of the same task in two scenarios (before/after pattern)
   notes: Fully data-driven through props, no named slots. Each row is a pipeline of steps.
+  usage-markdown: |
+    <AveFlowContrast
+      title="Install Dependencies"
+      hostLabel="Without Sandbox"
+      sandboxLabel="With Sandbox"
+      :hostSteps='[
+        {"icon":"📥","label":"Download","type":"step"},
+        {"icon":"","label":"Blocked","type":"interrupt"},
+        {"icon":"⚙️","label":"Install","type":"step"}
+      ]'
+      :sandboxSteps='[
+        {"icon":"📥","label":"Download","type":"step"},
+        {"icon":"","label":"","type":"interrupt"},
+        {"icon":"⚙️","label":"Install","type":"step"}
+      ]'
+      hostResult="❌ Risk of malicious scripts"
+      sandboxResult="✅ Isolated execution"
+    />
+  usage-json: |
+    {
+      "component": "AveFlowContrast",
+      "props": {
+        "title": "Install Dependencies",
+        "hostLabel": "Without Sandbox",
+        "sandboxLabel": "With Sandbox",
+        "hostSteps": [{"icon":"📥","label":"Download","type":"step"},{"icon":"","label":"Blocked","type":"interrupt"},{"icon":"⚙️","label":"Install","type":"step"}],
+        "sandboxSteps": [{"icon":"📥","label":"Download","type":"step"},{"icon":"","label":"","type":"interrupt"},{"icon":"⚙️","label":"Install","type":"step"}],
+        "hostResult": "❌ Risk of malicious scripts",
+        "sandboxResult": "✅ Isolated execution"
+      }
+    }
+  layout-constraints: |
+    - steps per row: 3-5 (3 recommended; beyond 5 nodes get too narrow)
+    - step label: max ~20 chars EN / ~10 chars CJK (longer text wraps inside the node)
+    - hostLabel / sandboxLabel: max ~30 chars EN / ~15 chars CJK
+    - hostResult / sandboxResult: max ~50 chars EN / ~25 chars CJK
+    - title: max ~40 chars EN / ~20 chars CJK
+    - recommended viewport width: 1400 (steps use flex:1, wider viewport = more space per step)
 -->
 <script setup lang="ts">
 interface FlowStep {
@@ -72,7 +110,7 @@ defineProps<{
 </template>
 
 <style scoped>
-.container { max-width: 940px; width: 100%; }
+.container { width: 100%; }
 
 .title-card { text-align: center; margin-bottom: 8px; }
 .title-card span {
@@ -96,10 +134,11 @@ defineProps<{
 }
 .sandbox-label { background: var(--ave-safe-bg); color: var(--ave-safe-text); }
 
-.pipeline { display: flex; align-items: center; justify-content: center; gap: 0; }
+.pipeline { display: flex; align-items: center; justify-content: center; gap: 8px; }
 .step {
-  display: flex; flex-direction: column; align-items: center; gap: 2px;
-  padding: 6px; border-radius: 10px; white-space: nowrap; width: 110px;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 10px 16px; border-radius: 10px; text-align: center;
+  min-width: 120px; max-width: 220px;
 }
 .host-step { background: var(--ave-host-bg); border: 1.5px solid var(--ave-host-border); }
 .sandbox-step { background: var(--ave-safe-bg); border: 1.5px solid var(--ave-safe-border); }
@@ -108,14 +147,14 @@ defineProps<{
 
 .interrupt {
   display: flex; flex-direction: column; align-items: center;
-  padding: 0 10px; flex-shrink: 0; min-width: 60px;
+  padding: 0 12px; flex-shrink: 0; min-width: 60px;
 }
 .hand { font-size: var(--ave-body-size); }
 .interrupt-txt { font-size: var(--ave-body-size); color: var(--ave-color-bad); -webkit-text-stroke: 0.3px var(--ave-color-bad); }
 
 .smooth-arrow {
   display: flex; align-items: center; justify-content: center;
-  padding: 0 10px; flex-shrink: 0; min-width: 60px;
+  padding: 0 12px; flex-shrink: 0; min-width: 60px;
 }
 .line { width: 16px; height: 3px; background: var(--ave-safe-line); border-radius: 2px; }
 .check { font-size: 16px; margin: 0 1px; }

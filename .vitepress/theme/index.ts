@@ -16,7 +16,8 @@ import AveNode from '../../visual-components/components/AveNode.vue'
 import AveVerticalList from '../../visual-components/components/AveVerticalList.vue'
 import AveListItem from '../../visual-components/components/AveListItem.vue'
 import AveNestedBoundary from '../../visual-components/components/AveNestedBoundary.vue'
-import AveBoundaryItem from '../../visual-components/components/AveBoundaryItem.vue'
+import AveSimpleTable from '../../visual-components/components/AveSimpleTable.vue'
+import AveWorkflowContrast from '../../visual-components/components/AveWorkflowContrast.vue'
 
 export default {
   extends: DefaultTheme,
@@ -34,7 +35,8 @@ export default {
     app.component('AveVerticalList', AveVerticalList)
     app.component('AveListItem', AveListItem)
     app.component('AveNestedBoundary', AveNestedBoundary)
-    app.component('AveBoundaryItem', AveBoundaryItem)
+    app.component('AveSimpleTable', AveSimpleTable)
+    app.component('AveWorkflowContrast', AveWorkflowContrast)
 
     // When search modal appears, clear any previous input value
     if (typeof window !== 'undefined') {
