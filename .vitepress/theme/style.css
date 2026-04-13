@@ -333,3 +333,9 @@ body {
 .VPSocialLink[href*="github.com"]:hover::after {
   color: var(--vp-c-text-1);
 }
+
+/* Increase mermaid flowchart node border radius from default 5px to 12px */
+.mermaid .node rect {
+  rx: 12px;
+  ry: 12px;
+}
