@@ -276,6 +276,28 @@ body {
 .vp-doc .mermaid {
   overflow-x: auto;
 }
+/*
+ * Fix: multi-line mermaid node labels (with <br/>) get their second line clipped by the node border.
+ *
+ * Root cause: mermaid v11 with htmlLabels=true wraps node text in <foreignObject> whose
+ * height is computed for a single line of text. When a label contains <br/> and renders
+ * as two lines, the inner <div> overflows the foreignObject and the browser clips
+ * whatever falls outside — typically the lower half of CJK characters and parentheses
+ * on the second line. The parent <g.node><rect> is tall enough, but foreignObject's
+ * fixed height is the real clipper.
+ *
+ * Fix: force foreignObject (and its inner wrapper) to overflow:visible so content
+ * renders at its natural size; also pin line-height so the centered label stays
+ * vertically balanced inside the (correctly sized) rect.
+ */
+.vp-doc .mermaid foreignObject {
+  overflow: visible !important;
+}
+.vp-doc .mermaid foreignObject > div {
+  line-height: 1.5 !important;
+  white-space: normal !important;
+  overflow: visible !important;
+}
 
 /* ── Bottom paragraph spacing ── */
 .vp-doc p {
