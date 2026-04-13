@@ -38,6 +38,15 @@ export default {
     app.component('AveSimpleTable', AveSimpleTable)
     app.component('AveWorkflowContrast', AveWorkflowContrast)
 
+    // Register ELK layout engine for mermaid so diagrams can use layout: elk
+    if (typeof window !== 'undefined') {
+      import('mermaid').then(({ default: mermaid }) => {
+        import('@mermaid-js/layout-elk').then(({ default: elkLayouts }) => {
+          mermaid.registerLayoutLoaders(elkLayouts)
+        })
+      })
+    }
+
     // When search modal appears, clear any previous input value
     if (typeof window !== 'undefined') {
       const observer = new MutationObserver((mutations) => {

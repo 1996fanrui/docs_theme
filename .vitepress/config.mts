@@ -21,7 +21,7 @@ export default withMermaid(defineConfig({
       allowedHosts: true,
     },
     optimizeDeps: {
-      include: ['mermaid', 'dayjs'],
+      include: ['mermaid', 'dayjs', '@mermaid-js/layout-elk'],
     },
   },
 
